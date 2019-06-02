@@ -1,0 +1,30 @@
+<div class="buttons">
+  <div class="pull-right">
+    <input type="button" value="{{ button_confirm }}" id="button-confirm" data-loading-text="{{ text_loading }}" class="btn btn-primary" />
+  </div>
+</div>
+<script type="text/javascript"><!--
+$('#button-confirm').on('click', function() {
+        var el = $(this);
+	$.ajax({
+		url: 'index.php?route=extension/payment/arca/confirm',
+		dataType: 'json',
+                data:{isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)?1:0},
+                type:'POST',
+		beforeSend: function() {
+			el.button('loading');
+		},
+		complete: function() {
+			el.button('reset');
+		},
+		success: function(json) {
+			if (json['redirect']) {
+				window.location = json['redirect'];	
+			}
+                        else{
+                            alert(json['error']);
+                        }
+		}
+	});
+});
+//--></script>
